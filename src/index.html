@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="jquery.js"></script>
+        <script src="underscore.js"></script>
+        <script src="Console.js"></script>
+        <script>
+            var Module = {};
+            Module['noInitialRun'] = true;
+
+            var WIDTH = 96;
+            var HEIGHT = 100;
+            var term;
+
+            var mainLoop = null;
+
+            $(document).ready(function(){
+                term = new Console($('#content'), WIDTH, HEIGHT);
+                Module['run']();
+                mainLoop = Module['cwrap']('main_loop', 'void', ['i32', 'i32']);
+
+                mainLoop(0, 0);
+
+                $(document).keypress(function(e){
+                    console.log(e);
+                    var c = String.fromCharCode(e.keyCode);
+                    keyBuffer.push(c);
+                    mainLoop(0, 0);
+                });
+            });
+        </script>
+        <script src="bootstrap.js"></script>
+        <script src="vim.js"></script>
+    </head>
+    <body>
+        <div id="content" style="font-family: 'Lucia Console', Console, monospace; background-color:#DDDDDD;">
+        </div>
+    </body>
+</html>
